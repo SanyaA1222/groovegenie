@@ -56,6 +56,7 @@ def generate_playlist(genre_selections: list):
     global song_scores
     for key, value in song_scores.items():
         song_scores[key] = [elem for elem in value if elem.genre in genre_selections]
+        print(song_scores)
 
 
 def similarSong(good_songs: list):

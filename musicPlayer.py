@@ -72,17 +72,21 @@ def change_video(song_name):
 	try:
 		URLS = [f'https://www.youtube.com/watch?v={search_results[0]["videoId"]}']
 	except:
-		URLS = ["https://www.youtube.com/watch?v=fJ9rUzIMcZQ"]
-		song_label_global.config(text=f"Geenie plays...Bohemian Rhapsody")
+		return 1
+	try:
+		with YoutubeDL(options) as ydl:
+			print(ydl.download(URLS))
+	except:
+		return 1
 
-	with YoutubeDL(options) as ydl:
-		print(ydl.download(URLS))
+
 	music_name = search_results[0]["title"]
 	video_path = name
 	media = vlc_instance.media_new(video_path)
 	media_player.set_media(media)
 	slider_global.config()
 	play_video()
+	return 0
 
 
 
