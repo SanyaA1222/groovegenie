@@ -1,25 +1,50 @@
 import MovementDetection
+import songclassification
 
 # Random Frequency is per 1 min
-songsPlayed = 0
-randomFrequency = 1
+
+"""
+Join the Audiance feedback to  the scores of the song
+- We check if the audiance have a similar response to the song's expection. 
+"""
+
 audianceScore = MovementDetection.avgScore
-scoresOfTheNight = [audianceScore]
+# Score of the previous song
+scoreOfSong = 0
+songName = ""
+goodSongs = []
 scoreToMusic = {}
 
-def updateRandomFrequency():
-    # Update the random Testing the waters frequency based on the numbers of songs played
-    pass
+
 def songOver():
     MovementDetection.scoresOfThisSong = []
-    global songsPlayed
-    songsPlayed += 1
-    updateRandomFrequency()
+    difference = abs(MovementDetection.avgScore - scoreOfSong)
+    if (len(goodSongs) < 11):
+        goodSongs.append((difference, songName))
+    else:
+        if goodSongs[9][0] > difference:
+            goodSongs.pop(9)
+            goodSongs.append((difference, songName))
+            goodSongs = sorted(goodSongs, key=lambda x: x[0])
+    getSong()
+
+
 def getSong():
-    # if it is the time to test the waters using the random song play a random song. Use random frequency.
+    """
+    Update the scoreofSong
+
+    """
+    if len(goodSongs) == 10:
+        similarSong(goodSongs)
+    else:
+        song_movement(audianceScore)
+
     pass
+
+
 def playSong():
     # play the song
+
     songOver()
 
 
