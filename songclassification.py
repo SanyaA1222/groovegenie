@@ -18,7 +18,7 @@ class Song:
 
 # 0: Dancebility, 1: Energy, 8: Liveliness, 10: Tempo, 18: Genre, 19: Song Name
 def calculate_score():
-    with open('newsongs.csv', 'r', encoding="utf8") as csv_file:
+    with open('genres_v2.csv', 'r', encoding="utf8") as csv_file:
         reader = csv.reader(csv_file)
 
         global song_scores
@@ -58,7 +58,7 @@ def generate_playlist(genre_selections: list):
         song_scores[key] = [elem for elem in value if elem.genre in genre_selections]
 
 
-def similarSong(good_songs: list):
+def similarSong(good_songs: list, audience_score: int):
         global song_scores
         global names
         min_song = None
@@ -72,11 +72,13 @@ def similarSong(good_songs: list):
                     similarity += (abs(song.liveliness - names[saved[1]].liveliness))
                     similarity += (abs(song.tempo/100 - names[saved[1]].tempo/100))
                 song.similarity = similarity
-                if similarity < min_sim:
+                if similarity < min_sim and (audience_score - 1 < key < audience_score + 1):
                     min_sim = similarity
                     min_song = song
-
-        return min_song.name
+        if min_song is None:
+            return song_movement(audience_score)
+        else:
+            return min_song.name
 
 
 def song_movement(audience_score: int):

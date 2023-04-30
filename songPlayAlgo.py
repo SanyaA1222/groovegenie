@@ -46,7 +46,7 @@ def getSong():
 
     """
     if len(goodSongs) == bound + 1:
-       return similarSong(goodSongs)
+       return similarSong(goodSongs, audianceScore)
     else:
         return song_movement(audianceScore)
 
