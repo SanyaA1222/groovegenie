@@ -1,18 +1,25 @@
 from ytmusicapi import YTMusic
+import ctypes
 
-import tkinter as tk
 from yt_dlp import YoutubeDL
 import os
+import tkinter as tk
+
 os.add_dll_directory(r'C:\Program Files\VideoLAN\VLC')
-name= "Music.mp4"
+name = "Music.mp4"
 music_name = ""
 import vlc
 # start
-
+vlc_instance = None
+media_player = None
+slider_global = None
+root_global = None
+song_label_global = None
 count = 0
+
 def play_video():
 	media_player.play()
-	root.after(1000, update_slider)
+	root_global.after(1000, update_slider)
 
 
 def set_video_time(val):
@@ -30,19 +37,20 @@ def update_slider():
 
 	video_length = media_player.get_media().get_duration()
 	if video_length > 0:
-		slider.config(to=video_length)
+		slider_global.config(to=video_length)
 		current_time = media_player.get_time()
-		slider.set(current_time)
+		slider_global.set(current_time)
+
+	root_global.after(1000, update_slider)
 
 
-	root.after(1000, update_slider)
-
-
-def change_video():
+def change_video(song_name):
 	global music_name
+	song_label_global.config(text=f"Geenie plays...{song_name}")
+
 	ytmusic = YTMusic("oauth.json")
 
-	search_results = ytmusic.search(video_path_entry.get())
+	search_results = ytmusic.search(song_name)
 	try:
 		os.remove("Music.mp4")
 	except:
@@ -63,36 +71,25 @@ def change_video():
 	play_video()
 
 
-root = tk.Tk()
-root.title("MP4 Video Player")
-root.geometry("640x480")
+def start(slider, root, song_label):
+	global vlc_instance, media_player, slider_global, root_global, song_label_global
+	vlc_instance = vlc.Instance('--no-xlib')
+	media_player = vlc_instance.media_player_new()
 
-video_canvas = tk.Canvas(root, bg="black", width=640, height=360)
-video_canvas.pack()
+	video_file = name
+	media = vlc_instance.media_new(video_file)
+	media_player.set_media(media)
+	hide_root = tk.Tk()
+	hide_root.withdraw()
 
-vlc_instance = vlc.Instance()
-media_player = vlc_instance.media_player_new()
+	video_canvas = tk.Canvas(hide_root, bg="black", width=640, height=360)
+	video_canvas.pack()
 
-video_file = name
-media = vlc_instance.media_new(video_file)
-media_player.set_media(media)
+	media_player.set_hwnd(video_canvas.winfo_id())
 
-media_player.set_hwnd(video_canvas.winfo_id())
+	slider.config(command=set_video_time)
 
-play_button = tk.Button(root, text="Play", command=play_video)
-play_button.pack()
-
-slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL,
-				  command=set_video_time)
-slider.pack(fill=tk.X)
-
-video_path_label = tk.Label(root, text="Enter video path:")
-video_path_label.pack()
-
-video_path_entry = tk.Entry(root)
-video_path_entry.pack(fill=tk.X)
-
-change_video_button = tk.Button(root, text="Change Video", command=change_video)
-change_video_button.pack()
-
-root.mainloop()
+	slider_global = slider
+	root_global = root
+	song_label_global = song_label
+	#hide_root.mainloop()

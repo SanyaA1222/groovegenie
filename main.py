@@ -5,7 +5,7 @@ import cv2
 
 from MovementDetection import process_frame
 
-
+import musicPlayer
 def start_countdown():
     # create animated text, but hide it initially
     button2.config(state=tk.DISABLED)
@@ -76,9 +76,10 @@ if __name__ == "__main__":
 
     #slider for duration of music
     slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL)
+    musicPlayer.start(slider, root, song_label)
+    musicPlayer.change_video("Bones Imagine Dragon")
 
-
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("walking.mp4")
     stop_event = threading.Event()
 
     # Start the frame processing thread
