@@ -1,11 +1,12 @@
 from ytmusicapi import YTMusic
-import vlc
+
 import tkinter as tk
 from yt_dlp import YoutubeDL
 import os
-
+os.add_dll_directory(r'C:\Program Files\VideoLAN\VLC')
 name= "Music.mp4"
-
+music_name = ""
+import vlc
 # start
 
 count = 0
@@ -38,11 +39,14 @@ def update_slider():
 
 
 def change_video():
+	global music_name
 	ytmusic = YTMusic("oauth.json")
 
 	search_results = ytmusic.search(video_path_entry.get())
-	os.remove("Music.mp4")
-
+	try:
+		os.remove("Music.mp4")
+	except:
+		pass
 	name = f"Music.mp4"
 	print(name)
 	options = {
@@ -52,7 +56,7 @@ def change_video():
 	URLS = [f'https://www.youtube.com/watch?v={search_results[0]["videoId"]}']
 	with YoutubeDL(options) as ydl:
 		print(ydl.download(URLS))
-
+	music_name = search_results[0]["title"]
 	video_path = name
 	media = vlc_instance.media_new(video_path)
 	media_player.set_media(media)
