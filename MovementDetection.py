@@ -8,8 +8,8 @@ import movementToScore
 
 scoresOfThisSong = []
 peopleScore = movementToScore.MovementScore()
-
-avgScore = 0
+cur_score = 0
+running_avg_movement = 0
 def create_heatmap(movement_map, gamma=1.5):  # Adjust the gamma value as needed
     movement_map_gamma = np.power(movement_map, gamma)
     movement_map_8bit = np.uint8(
@@ -34,8 +34,8 @@ def update_canvas(canvas, frame):
     canvas.image = imgtk
 
 
-def process_frame(canvas, cap, stop_event):
-    global avgScore
+def process_frame(canvas, cap, stop_event, audience_score_label):
+    global avgScore, running_avg_movement
     total_movement = 0
     frame_count = 0
     prev_gray_frame = None
@@ -75,5 +75,6 @@ def process_frame(canvas, cap, stop_event):
             scoresOfThisSong.append(peopleScore.get_score(running_avg_movement))
             #print(scoresOfThisSong)
             avgScore = sum(scoresOfThisSong) / len(scoresOfThisSong)
+            audience_score_label.config(text="Audience Score : {}".format(int(running_avg_movement)))
             #print(avgScore)
         prev_gray_frame = gray_frame.copy()
