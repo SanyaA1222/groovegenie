@@ -3,6 +3,7 @@ import numpy as np
 import random
 
 song_scores = {}
+names = {}
 
 class Song:
     def __init__(self, name, genre, danceability, energy, liveliness, tempo):
@@ -21,6 +22,7 @@ def calculate_score():
         reader = csv.reader(csv_file)
 
         global song_scores
+        global names
 
         i = 0
         for row in reader:
@@ -28,11 +30,12 @@ def calculate_score():
                 i += 1
                 continue
             score = 0
-            score += (row[0] * 10) * 2
-            score += row[1] * 10
-            score += row[8] * 10
+            score += (float(row[0]) * 10) * 2
+            score += float(row[1]) * 10
+            score += float(row[8]) * 10
             score += (float(row[10]) - 57) / 16.4
             score /= 5
+            names[row[19]] = Song(row[19], row[18], row[0], row[1], row[8], row[10])
             if score not in song_scores:
                 song_scores[score] = [Song(row[19], row[18], row[0], row[1], row[8], row[10])]
             else:
@@ -57,16 +60,17 @@ def generate_playlist(genre_selections: list):
 
 def similarSong(good_songs: list):
         global song_scores
+        global names
         min_song = None
         min_sim = float('inf')
         for key, value in song_scores.items():
             for song in value:
                 similarity = 0
-                for song in good_songs:
-                    similarity += (abs(song.danceability - good_songs[2].danceability))
-                    similarity += (abs(song.energy - good_songs[2].energy))
-                    similarity += (abs(song.liveliness - good_songs[2].liveliness))
-                    similarity += (abs(song.tempo/100 - good_songs[2].tempo/100))
+                for saved in good_songs:
+                    similarity += (abs(song.danceability - names(saved[1]).danceability))
+                    similarity += (abs(song.energy - names(saved[1]).energy))
+                    similarity += (abs(song.liveliness - names(saved[1]).liveliness))
+                    similarity += (abs(song.tempo/100 - names(saved[1]).tempo/100))
                 song.similarity = similarity
                 similarity.append(similarity)
                 if similarity < min_sim:
@@ -92,10 +96,3 @@ def song_movement(audience_score: int):
 
     ret_idx = random.randint(0, len(songs))
     return songs[ret_idx]
-
-
-
-
-
-
-
