@@ -14,38 +14,41 @@ songName = ""
 goodSongs = []
 scoreToMusic = {}
 calculate_score()
-
+bound = 40
 def starting(movement, checklist_genres):
+    global bound
     global Movement, audianceScore
     Movement = movement
     audianceScore = Movement.avgScore
     generate_playlist(checklist_genres)
 
 def songOver():
+    global bound
     Movement.scoresOfThisSong = [0]
     difference = abs(Movement.avgScore - scoreOfSong)
     global goodSongs, audianceScore
     audianceScore = Movement.avgScore
 
-    if (len(goodSongs) < 6):
+    if (len(goodSongs) < bound + 2):
         goodSongs.append((difference, songName))
     else:
-        if goodSongs[9][0] > difference:
-            goodSongs.pop(9)
+        if goodSongs[bound][0] > difference:
+            goodSongs.pop(bound)
             goodSongs.append((difference, songName))
             goodSongs = sorted(goodSongs, key=lambda x: x[0])
     return getSong()
 
 
 def getSong():
+    global bound
     """
     Update the scoreofSong
 
     """
-    # if len(goodSongs) == 5:
-       # return similarSong(goodSongs)
-    #else:
-    return song_movement(audianceScore)
+    if len(goodSongs) == bound + 1:
+       return similarSong(goodSongs)
+    else:
+        return song_movement(audianceScore)
 
 
 
