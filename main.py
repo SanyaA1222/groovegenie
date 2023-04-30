@@ -73,10 +73,10 @@ if __name__ == "__main__":
 
     # create canvas
     canvas = tk.Canvas(root, bg="black", width=480, height=480)
-    # canvas.pack()
 
     #slider for duration of music
     slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL)
+
 
     cap = cv2.VideoCapture(0)
     stop_event = threading.Event()
