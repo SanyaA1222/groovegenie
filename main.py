@@ -15,7 +15,7 @@ def start_countdown(checklist_genres):
     countdown = tk.StringVar()
     countdown.set("Ready to Groove?")
     countdown_label = tk.Label(root, textvariable=countdown, bg="#e3f3f3",
-							   font=("Arial", 12))
+                               font=("Arial", 12))
     countdown_label.pack()
     root.after(1000, update_countdown, 3, countdown, countdown_label)
 
@@ -33,6 +33,7 @@ def update_countdown(count, countdown, countdown_label):
         countdown_label.place_forget()
         song_label.pack()
         canvas.pack()
+        audience_score_label.pack()
         slider.pack(fill=tk.X)
         musicPlayer.change_video("What Do you mean")  # TODO remove this
         logo_label.after(0, animate_logo)
@@ -49,12 +50,13 @@ def animate_logo():
         logo_label.config(image=small_gg1)
     logo_label.after(500, animate_logo)
 
+
 # set the selected options when the combobox is closed
 def show_selected_genres():
     # Get the selected genres
     checklist_genres = []
-    for genre_var in genre_vars :
-        if len(genre_var.get()) > 1 :
+    for genre_var in genre_vars:
+        if len(genre_var.get()) > 1:
             checklist_genres.append(genre_var.get())
     songPlayAlgo.starting(MD, checklist_genres)
 
@@ -65,6 +67,7 @@ def show_selected_genres():
     genre_dropdown.destroy()
     genre_dropdown_button.destroy()
     start_countdown(checklist_genres)
+
 
 def on_song_end():
     musicPlayer.change_video(songPlayAlgo.songOver())
@@ -80,11 +83,17 @@ def show_genre_dropdown():
     for genre in genres:
         var = tk.StringVar(value=genre in default_genres)
         genre_vars.append(var)
-        cb = tk.Checkbutton(genre_dropdown, text=genre, variable=var, onvalue=genre, offvalue="",bg="#e3f3f3", fg="#3e4262")
+        cb = tk.Checkbutton(genre_dropdown, text=genre, variable=var,
+                            onvalue=genre, offvalue="", bg="#e3f3f3",
+                            fg="#3e4262")
         cb.pack(padx=10, pady=5, anchor="w")
     # Add an OK button to save the selected genres
-    ok_button = tk.Button(genre_dropdown, text="OK", command=show_selected_genres,bg="#e3f3f3", fg="#3e4262")
+    ok_button = tk.Button(genre_dropdown, text="OK",
+                          command=show_selected_genres, bg="#e3f3f3",
+                          fg="#3e4262")
     ok_button.pack(pady=10)
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.state('zoomed')
@@ -105,15 +114,19 @@ if __name__ == "__main__":
                           bg="#e3f3f3", font=("Arial", 12))
     song_label.config(highlightthickness=0)
 
+    #create audience score label
+    audience_score_label = tk.Label(root, text="Audience Score : ".format("0"),bg="#e3f3f3", font=("Arial", 12))
     # create a list of options for the checklist
-    genres = [ 'Dark Trap', 'Underground Rap', 'Trap Metal', 'Emo', 'Rap', 'RnB', 'Pop', 'Hiphop', 'techhouse', 'techno', 'trance', 'psytrance', 'trap', 'dnb', 'hardstyle']
+    genres = ['Dark Trap', 'Underground Rap', 'Trap Metal', 'Emo', 'Rap', 'RnB',
+              'Pop', 'Hiphop', 'techhouse', 'techno', 'trance', 'psytrance',
+              'trap', 'dnb', 'hardstyle']
     default_genres = ["Rock", "Pop", "Hip Hop"]
     # Create the genre label and dropdown button
 
     genre_dropdown_button = tk.Button(root, text="Select Genres",
-                                       command=show_genre_dropdown,bg="#e3f3f3", fg="#3e4262")
+                                      command=show_genre_dropdown, bg="#e3f3f3",
+                                      fg="#3e4262")
     genre_dropdown_button.pack(pady=5)
-
 
     # create canvas
     canvas = tk.Canvas(root, bg="black", width=480, height=480)
@@ -127,7 +140,7 @@ if __name__ == "__main__":
 
     # Start the frame processing thread
     process_thread = threading.Thread(target=MD.process_frame,
-                                      args=(canvas, cap, stop_event))
+                                      args=(canvas, cap, stop_event, audience_score_label))
     process_thread.start()
 
 
