@@ -88,12 +88,16 @@ def song_movement(audience_score: int):
     value = audience_score
     songs = []
 
+    i = 0
     while len(songs) <= 50:
         diff = [abs(value - i) for i in keys]
         index = np.argmin(diff)
         closest_value = keys[index]
         songs.extend([song.name for song in song_scores[closest_value]])
         keys.pop(index)
+        i+= 1
+        if i == 100:
+            break
 
     ret_idx = random.randint(0, len(songs)-1)
     return songs[ret_idx]
