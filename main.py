@@ -6,13 +6,15 @@ import cv2
 from MovementDetection import process_frame
 
 import musicPlayer
+
+
 def start_countdown():
     # create animated text, but hide it initially
     button2.config(state=tk.DISABLED)
     countdown = tk.StringVar()
     countdown.set("Ready to Groove?")
     countdown_label = tk.Label(root, textvariable=countdown, bg="#e3f3f3",
-                               font=("Arial", 12))
+							   font=("Arial", 12))
     countdown_label.pack()
     root.after(1000, update_countdown, 3, countdown, countdown_label)
 
@@ -31,7 +33,7 @@ def update_countdown(count, countdown, countdown_label):
         song_label.pack()
         canvas.pack()
         slider.pack(fill=tk.X)
-        musicPlayer.change_video("Bones Imagine Dragon") #TODO remove this
+        musicPlayer.change_video("What Do you mean")  # TODO remove this
         logo_label.after(0, animate_logo)
     else:
         return
@@ -46,6 +48,9 @@ def animate_logo():
         logo_label.config(image=small_gg1)
     logo_label.after(500, animate_logo)
 
+
+def on_song_end():
+    musicPlayer.change_video("Hey Jude")
 
 
 if __name__ == "__main__":
@@ -75,9 +80,9 @@ if __name__ == "__main__":
     # create canvas
     canvas = tk.Canvas(root, bg="black", width=480, height=480)
 
-    #slider for duration of music
+    # slider for duration of music
     slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL)
-    musicPlayer.start(slider, root, song_label)
+    musicPlayer.start(slider, root, song_label, on_song_end)
 
     cap = cv2.VideoCapture("walking.mp4")
     stop_event = threading.Event()
