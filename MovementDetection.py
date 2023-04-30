@@ -9,12 +9,15 @@ import movementToScore
 scoresOfThisSong = []
 peopleScore = movementToScore.MovementScore()
 
+
 def create_heatmap(movement_map, gamma=1.5):  # Adjust the gamma value as needed
     movement_map_gamma = np.power(movement_map, gamma)
-    movement_map_8bit = np.uint8(255 * (movement_map_gamma / np.max(movement_map_gamma)))
+    movement_map_8bit = np.uint8(
+        255 * (movement_map_gamma / np.max(movement_map_gamma)))
     heatmap = cv2.applyColorMap(movement_map_8bit, cv2.COLORMAP_JET)
     heatmap[movement_map_8bit < 50] = 0  # Adjust the threshold as needed
     return heatmap
+
 
 def update_canvas(canvas, frame):
     canvas_width = canvas.winfo_width()
@@ -22,19 +25,22 @@ def update_canvas(canvas, frame):
 
     # Resize the frame to match the canvas size
     resized_frame = cv2.resize(frame, (canvas_width, canvas_height))
-    resized_frame = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
+    resized_frame = cv2.cvtColor(resized_frame,
+                                 cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
 
     img = Image.fromarray(resized_frame)
     imgtk = ImageTk.PhotoImage(image=img)
     canvas.create_image(0, 0, anchor=tk.NW, image=imgtk)
     canvas.image = imgtk
 
+
 def process_frame(canvas, cap, stop_event):
 
     total_movement = 0
     frame_count = 0
     prev_gray_frame = None
-    running_avg_buffer = deque(maxlen=30)  # Circular buffer for 30-frame running average
+    running_avg_buffer = deque(
+        maxlen=30)  # Circular buffer for 30-frame running average
 
     while not stop_event.is_set():
         ret, frame = cap.read()
@@ -54,7 +60,8 @@ def process_frame(canvas, cap, stop_event):
 
             total_movement += movement
             frame_count += 1
-            running_avg_buffer.append(movement)  # Add the movement to the buffer
+            running_avg_buffer.append(
+                movement)  # Add the movement to the buffer
 
             heatmap = create_heatmap(movement_map)
             overlaid_frame = cv2.addWeighted(frame, 0.7, heatmap, 0.3, 0)
