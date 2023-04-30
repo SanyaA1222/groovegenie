@@ -4,6 +4,10 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from collections import deque
 import threading
+import movementToScore
+
+scoresOfThisSong = []
+peopleScore = movementToScore.MovementScore()
 
 
 def create_heatmap(movement_map, gamma=1.5):  # Adjust the gamma value as needed
@@ -65,41 +69,10 @@ def process_frame(canvas, cap, stop_event):
 
             # Calculate and print the 30-frame running average of the average movement
             running_avg_movement = np.mean(running_avg_buffer)
-            print(
-                f"30-frame running average movement for frame {frame_count}: {running_avg_movement}")
-
+            print(f"30-frame running average movement for frame {frame_count}: {running_avg_movement}")
+            peopleScore.add_val(running_avg_movement)
+            scoresOfThisSong.append(peopleScore.get_score(running_avg_movement))
+            print(scoresOfThisSong)
+            avgScore = sum(scoresOfThisSong) / len(scoresOfThisSong)
+            print(avgScore)
         prev_gray_frame = gray_frame.copy()
-
-
-def temp():
-    pass
-
-
-def main():
-    cap = cv2.VideoCapture("walking.mp4")
-    ret, frame = cap.read()
-
-    root = tk.Tk()
-    canvas = tk.Canvas(root, width=1000, height=1000)
-    print(frame.shape, frame.shape)
-    canvas.pack()
-
-    stop_event = threading.Event()
-
-    # Start the frame processing thread
-    process_thread = threading.Thread(target=process_frame,
-                                      args=(canvas, stop_event))
-    process_thread.start()
-
-    def on_closing():
-        stop_event.set()
-        process_thread.join()
-        cap.release()
-        root.destroy()
-
-    root.protocol("WM_DELETE_WINDOW", on_closing)
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    main()

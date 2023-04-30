@@ -4,9 +4,9 @@ Create a movement score object and call add val whenever a new score is recieved
 """
 
 class MovementScore:
-    def __init__(self, min_val, max_val):
-        self.min_val = min_val
-        self.max_val = max_val
+    def __init__(self):
+        self.min_val = 0
+        self.max_val = 2
 
     def add_val(self, new_val):
         if new_val > self.max_val:
