@@ -31,6 +31,7 @@ def update_countdown(count, countdown, countdown_label):
         song_label.pack()
         canvas.pack()
         slider.pack(fill=tk.X)
+        musicPlayer.change_video("Bones Imagine Dragon") #TODO remove this
         logo_label.after(0, animate_logo)
     else:
         return
@@ -77,7 +78,6 @@ if __name__ == "__main__":
     #slider for duration of music
     slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL)
     musicPlayer.start(slider, root, song_label)
-    musicPlayer.change_video("Bones Imagine Dragon")
 
     cap = cv2.VideoCapture("walking.mp4")
     stop_event = threading.Event()
