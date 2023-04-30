@@ -3,6 +3,7 @@ Create a movement score object and call add val whenever a new score is recieved
 
 """
 
+
 class MovementScore:
     def __init__(self):
         self.min_val = 0

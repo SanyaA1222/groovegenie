@@ -19,7 +19,7 @@ def songOver():
     MovementDetection.scoresOfThisSong = [0]
     difference = abs(MovementDetection.avgScore - scoreOfSong)
     global goodSongs
-
+    audianceScore = MovementDetection.avgScore
     if (len(goodSongs) < 11):
         goodSongs.append((difference, songName))
     else:
