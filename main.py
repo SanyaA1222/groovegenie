@@ -6,9 +6,12 @@ import cv2
 from MovementDetection import process_frame
 
 
-def start_countdown():
+def start_countdown(selected_genre):
     # create animated text, but hide it initially
-    button2.config(state=tk.DISABLED)
+    global genre
+    genre = selected_genre
+    print(genre)
+    drop.config(state='disabled')
     countdown = tk.StringVar()
     countdown.set("Ready to Groove?")
     countdown_label = tk.Label(root, textvariable=countdown, bg="#e3f3f3",
@@ -53,8 +56,8 @@ if __name__ == "__main__":
 
     gg1 = tk.PhotoImage(file="gg1crop.png")
     gg2 = tk.PhotoImage(file="gg2crop.png")
-    small_gg1 = gg1.subsample(1, 1)
-    small_gg2 = gg2.subsample(1, 1)
+    small_gg1 = gg1.subsample(2, 2)
+    small_gg2 = gg2.subsample(2, 2)
     logo_label = tk.Label(root, image=small_gg1, borderwidth=0, bg="#e3f3f3")
     logo_label.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
     logo_label.pack()
@@ -66,16 +69,22 @@ if __name__ == "__main__":
     song_label = tk.Label(root, text="Geenie plays...{}".format(song.get()),
                           bg="#e3f3f3", font=("Arial", 12))
     song_label.config(highlightthickness=0)
-
-    # create start button
-    button2 = tk.Button(root, text="Start", command=start_countdown)
-    button2.pack()
+    # Set the Menu initially
+    menu = tk.StringVar()
+    menu.set("Select Any Genre")
+    # Create a dropdown Menu
+    drop = tk.OptionMenu(root, menu, 'Dark Trap', 'Underground Rap',
+                         'Trap Metal', 'Emo', 'Rap', 'RnB', 'Pop', 'Hiphop',
+                         'techhouse', 'techno', 'trance', 'psytrance', 'trap',
+                         'dnb', 'hardstyle', command=lambda selected_genre: start_countdown(selected_genre))
+    drop.pack()
+    selected_genre = menu.get()
 
     # create canvas
     canvas = tk.Canvas(root, bg="black", width=480, height=480)
 
     #slider for duration of music
-    slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL)
+    slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL, length=200)
 
 
     cap = cv2.VideoCapture(0)
