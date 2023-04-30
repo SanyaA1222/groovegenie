@@ -2,6 +2,7 @@ from ytmusicapi import YTMusic
 import vlc
 import tkinter as tk
 from yt_dlp import YoutubeDL
+import os
 
 name= "Music.mp4"
 
@@ -40,6 +41,7 @@ def change_video():
 	ytmusic = YTMusic("oauth.json")
 
 	search_results = ytmusic.search(video_path_entry.get())
+	os.remove("Music.mp4")
 
 	name = f"Music.mp4"
 	print(name)
