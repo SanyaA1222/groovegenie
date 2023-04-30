@@ -15,7 +15,7 @@ def start_countdown(selected_genre):
     countdown = tk.StringVar()
     countdown.set("Ready to Groove?")
     countdown_label = tk.Label(root, textvariable=countdown, bg="#e3f3f3",
-                               font=("Arial", 12))
+                               font=("Arial", 12), fg="#3e4262")
     countdown_label.pack()
     root.after(1000, update_countdown, 3, countdown, countdown_label)
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     # create song label, but hide it initially
     song_label = tk.Label(root, text="Geenie plays...{}".format(song.get()),
-                          bg="#e3f3f3", font=("Arial", 12))
+                          bg="#e3f3f3", font=("Arial", 12), fg="#3e4262")
     song_label.config(highlightthickness=0)
     # Set the Menu initially
     menu = tk.StringVar()
@@ -77,6 +77,7 @@ if __name__ == "__main__":
                          'Trap Metal', 'Emo', 'Rap', 'RnB', 'Pop', 'Hiphop',
                          'techhouse', 'techno', 'trance', 'psytrance', 'trap',
                          'dnb', 'hardstyle', command=lambda selected_genre: start_countdown(selected_genre))
+    drop.config(background='#cbcee7', foreground='#3e4262', font=('Arial', 12))
     drop.pack()
     selected_genre = menu.get()
 
