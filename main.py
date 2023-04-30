@@ -67,8 +67,9 @@ def show_selected_genres():
     start_countdown(checklist_genres)
 
 def on_song_end():
-    musicPlayer.change_video(songPlayAlgo.songOver())
-
+    out = musicPlayer.change_video(songPlayAlgo.songOver())
+    while out == 1:
+        out = musicPlayer.change_video(songPlayAlgo.getSong())
 
 def show_genre_dropdown():
     global genre_vars, genre_dropdown

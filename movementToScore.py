@@ -17,6 +17,5 @@ class MovementScore:
         """
         Maps a given number in the range onto a scale of 10.
         """
-        print(((num - self.min_val) / (self.max_val - self.min_val)) * 20)
         return ((num - self.min_val) / (self.max_val - self.min_val)) * 20
 
