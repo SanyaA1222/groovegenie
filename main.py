@@ -29,7 +29,7 @@ def update_countdown(count, countdown, countdown_label):
     elif count == 1:
         countdown.set(str(count))
     elif count == 0:
-        countdown.set("Start Grooving!")
+        countdown.set("Selected Genres :" + ",".join(selected_genres))
         # remove countdown_label and show song_label
         countdown_label.place_forget()
         song_label.pack()
