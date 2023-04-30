@@ -15,7 +15,6 @@ songName = ""
 goodSongs = []
 scoreToMusic = {}
 
-
 def songOver():
     MovementDetection.scoresOfThisSong = [0]
     difference = abs(MovementDetection.avgScore - scoreOfSong)
@@ -49,5 +48,11 @@ def playSong():
 
     songOver()
 
+def getSong():
+	# if it is the time to test the waters using the random song play a random song. Use random frequency.
+	pass
 
 
+def playSong():
+	# play the song
+	songOver()

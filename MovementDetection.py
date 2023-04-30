@@ -69,10 +69,11 @@ def process_frame(canvas, cap, stop_event):
 
             # Calculate and print the 30-frame running average of the average movement
             running_avg_movement = np.mean(running_avg_buffer)
-            print(f"30-frame running average movement for frame {frame_count}: {running_avg_movement}")
+            #print(f"30-frame running average movement for frame {frame_count}: {running_avg_movement}")
+
             peopleScore.add_val(running_avg_movement)
             scoresOfThisSong.append(peopleScore.get_score(running_avg_movement))
-            print(scoresOfThisSong)
+            #print(scoresOfThisSong)
             avgScore = sum(scoresOfThisSong) / len(scoresOfThisSong)
-            print(avgScore)
+            #print(avgScore)
         prev_gray_frame = gray_frame.copy()
