@@ -1,5 +1,4 @@
-import MovementDetection
-import songclassification
+from songclassification import *
 
 # Random Frequency is per 1 min
 
@@ -7,27 +6,35 @@ import songclassification
 Join the Audiance feedback to  the scores of the song
 - We check if the audiance have a similar response to the song's expection. 
 """
-
-audianceScore = MovementDetection.avgScore
+audianceScore = 0
+Movement = None
 # Score of the previous song
 scoreOfSong = 0
 songName = ""
 goodSongs = []
 scoreToMusic = {}
+calculate_score()
+
+def starting(movement, checklist_genres):
+    global Movement, audianceScore
+    Movement = movement
+    audianceScore = Movement.avgScore
+    generate_playlist(checklist_genres)
 
 def songOver():
-    MovementDetection.scoresOfThisSong = [0]
-    difference = abs(MovementDetection.avgScore - scoreOfSong)
-    global goodSongs
-    audianceScore = MovementDetection.avgScore
-    if (len(goodSongs) < 11):
+    Movement.scoresOfThisSong = [0]
+    difference = abs(Movement.avgScore - scoreOfSong)
+    global goodSongs, audianceScore
+    audianceScore = Movement.avgScore
+
+    if (len(goodSongs) < 6):
         goodSongs.append((difference, songName))
     else:
         if goodSongs[9][0] > difference:
             goodSongs.pop(9)
             goodSongs.append((difference, songName))
             goodSongs = sorted(goodSongs, key=lambda x: x[0])
-    getSong()
+    return getSong()
 
 
 def getSong():
@@ -35,24 +42,10 @@ def getSong():
     Update the scoreofSong
 
     """
-    if len(goodSongs) == 10:
-        similarSong(goodSongs)
-    else:
-        song_movement(audianceScore)
-
-    pass
+    # if len(goodSongs) == 5:
+       # return similarSong(goodSongs)
+    #else:
+    return song_movement(audianceScore)
 
 
-def playSong():
-    # play the song
 
-    songOver()
-
-def getSong():
-	# if it is the time to test the waters using the random song play a random song. Use random frequency.
-	pass
-
-
-def playSong():
-	# play the song
-	songOver()

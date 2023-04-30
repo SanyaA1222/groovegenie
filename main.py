@@ -2,11 +2,10 @@ import threading
 import tkinter as tk
 
 import cv2
-
-from MovementDetection import process_frame
-
+import MovementDetection as MD
 import musicPlayer
 
+import songPlayAlgo
 
 def start_countdown(checklist_genres):
     # create animated text, but hide it initially
@@ -57,14 +56,18 @@ def show_selected_genres():
     for genre_var in genre_vars :
         if len(genre_var.get()) > 1 :
             checklist_genres.append(genre_var.get())
+    songPlayAlgo.starting(MD, checklist_genres)
+
     print("Selected Genres:", checklist_genres)
+
+
     # Close the dropdown
     genre_dropdown.destroy()
     genre_dropdown_button.destroy()
     start_countdown(checklist_genres)
 
 def on_song_end():
-    musicPlayer.change_video("Hey Jude")
+    musicPlayer.change_video(songPlayAlgo.songOver())
 
 
 def show_genre_dropdown():
@@ -119,11 +122,11 @@ if __name__ == "__main__":
     slider = tk.Scale(root, from_=0, to=1, orient=tk.HORIZONTAL)
     musicPlayer.start(slider, root, song_label, on_song_end)
 
-    cap = cv2.VideoCapture("walking.mp4")
+    cap = cv2.VideoCapture(0)
     stop_event = threading.Event()
 
     # Start the frame processing thread
-    process_thread = threading.Thread(target=process_frame,
+    process_thread = threading.Thread(target=MD.process_frame,
                                       args=(canvas, cap, stop_event))
     process_thread.start()
 

@@ -69,8 +69,12 @@ def change_video(song_name):
 	options = {
 		'outtmpl': name,
 	}
+	try:
+		URLS = [f'https://www.youtube.com/watch?v={search_results[0]["videoId"]}']
+	except:
+		URLS = ["https://www.youtube.com/watch?v=fJ9rUzIMcZQ"]
+		song_label_global.config(text=f"Geenie plays...Bohemian Rhapsody")
 
-	URLS = [f'https://www.youtube.com/watch?v={search_results[0]["videoId"]}']
 	with YoutubeDL(options) as ydl:
 		print(ydl.download(URLS))
 	music_name = search_results[0]["title"]
